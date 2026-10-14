@@ -1,0 +1,21 @@
+# Hébergement gratuit de la version web sur Render (https://render.com).
+# Render › New › Blueprint › choisir ce dépôt : le service est créé à partir
+# de ce fichier, puis redéployé automatiquement à chaque push sur main.
+services:
+  - type: web
+    name: legi
+    runtime: docker
+    plan: free
+    region: frankfurt
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /api/status
+    autoDeploy: true
+    envVars:
+      # Valeurs demandées à la création (jamais stockées dans le dépôt).
+      - key: OPENLEGI_TOKEN
+        sync: false
+      - key: OLLAMA_API_KEY
+        sync: false
+      # Code à saisir dans Paramètres pour utiliser le site (protège vos quotas).
+      - key: APP_ACCESS_CODE
+        sync: false
