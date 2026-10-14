@@ -1,0 +1,9 @@
+node_modules
+dist
+.env
+*.log
+src-tauri/target
+src-tauri/gen/schemas
+data
+src-tauri/gen/android
+src-tauri/gen/apple

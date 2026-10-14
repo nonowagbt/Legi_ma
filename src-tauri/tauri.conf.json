@@ -1,0 +1,68 @@
+{
+  "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
+  "productName": "Legi",
+  "version": "0.1.0",
+  "identifier": "fr.legi.app",
+  "build": {
+    "frontendDist": "../dist",
+    "devUrl": "http://localhost:1420",
+    "beforeDevCommand": "npm run dev",
+    "beforeBuildCommand": "npm run build"
+  },
+  "app": {
+    "windows": [
+      {
+        "title": "Legi",
+        "width": 1200,
+        "height": 820,
+        "resizable": true,
+        "fullscreen": false,
+        "minWidth": 420,
+        "minHeight": 500
+      }
+    ],
+    "security": {
+      "csp": null
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ],
+    "android": {
+      "minSdkVersion": 24,
+      "debugApplicationIdSuffix": ".debug"
+    },
+    "category": "Education",
+    "shortDescription": "Jurisprudence et codes pour étudiants en droit",
+    "longDescription": "Legi interroge Légifrance via OpenLegi : recherche d'arrêts, articles du Code civil, du Code de commerce et d'autres codes, et un assistant qui répond en citant ses sources.",
+    "publisher": "Legi",
+    "copyright": "© 2026 Legi",
+    "homepage": "https://github.com/nonowagbt/Legi_ma",
+    "windows": {
+      "nsis": {
+        "installMode": "currentUser",
+        "languages": [
+          "French",
+          "English"
+        ],
+        "displayLanguageSelector": false
+      },
+      "wix": {
+        "language": "fr-FR"
+      }
+    },
+    "macOS": {
+      "minimumSystemVersion": "10.15"
+    },
+    "iOS": {
+      "minimumSystemVersion": "14.0"
+    }
+  }
+}
