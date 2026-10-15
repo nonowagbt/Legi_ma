@@ -1,0 +1,36 @@
+# Publie la page de téléchargement (dossier site/) sur GitHub Pages :
+# https://nonowagbt.github.io/Legi_ma/
+# Prérequis (une fois) : Settings › Pages › Source : « GitHub Actions ».
+name: Page de téléchargement
+
+on:
+  push:
+    branches: [main]
+    paths: ["site/**", ".github/workflows/pages.yml"]
+  # Après publication d'une release, la page lit la nouvelle version d'elle-même :
+  # aucun redéploiement n'est nécessaire.
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+      - id: deployment
+        uses: actions/deploy-pages@v4

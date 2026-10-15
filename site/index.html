@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Télécharger Legi</title>
+<meta name="description" content="Legi : jurisprudence, codes et assistant juridique pour étudiants en droit. Téléchargement pour Windows, macOS, Linux, Android et iPhone." />
+<meta name="theme-color" content="#1f4e79" />
+<link rel="icon" type="image/svg+xml" href="icon.svg" />
+<link rel="apple-touch-icon" href="apple-touch-icon.png" />
+<style>
+  :root {
+    --bg: #f7f6f3; --surface: #ffffff; --surface-2: #f0eee9; --text: #1d1b18; --muted: #6b665e;
+    --border: #e2ded6; --accent: #1f4e79; --accent-text: #ffffff; --accent-soft: #e3ecf5; --ok: #2e7d32;
+    --font: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --serif: "Iowan Old Style", Georgia, "Times New Roman", serif;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #161514; --surface: #1f1e1c; --surface-2: #2a2826; --text: #ece9e4; --muted: #a39d93;
+      --border: #3a3734; --accent: #8fb8e0; --accent-text: #10202f; --accent-soft: #23303d; --ok: #9ccc9f;
+      color-scheme: dark;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.6 var(--font); }
+  a { color: var(--accent); }
+  main { max-width: 960px; margin: 0 auto; padding: 0 16px 64px; }
+  .hero { text-align: center; padding: 56px 0 40px; }
+  .hero img { width: 88px; height: 88px; }
+  h1 { font-family: var(--serif); font-weight: 500; font-size: clamp(30px, 6vw, 44px); margin: 16px 0 8px; }
+  .tagline { color: var(--muted); max-width: 560px; margin: 0 auto 28px; }
+  .primary {
+    display: inline-flex; align-items: center; gap: 10px; background: var(--accent); color: var(--accent-text);
+    text-decoration: none; font-weight: 600; padding: 14px 26px; border-radius: 12px; font-size: 17px;
+  }
+  .primary:hover { filter: brightness(1.08); }
+  .primary[aria-disabled="true"] { opacity: 0.5; pointer-events: none; }
+  .meta { color: var(--muted); font-size: 14px; margin-top: 12px; min-height: 1.6em; }
+  .secondary-links { margin-top: 10px; font-size: 14px; }
+  .notice { background: var(--accent-soft); border-radius: 10px; padding: 12px 16px; margin: 0 auto 32px; max-width: 640px; font-size: 15px; }
+  h2 { font-family: var(--serif); font-weight: 500; font-size: 24px; margin: 40px 0 16px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 18px; }
+  .card.current { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+  .card h3 { margin: 0 0 2px; font-size: 18px; }
+  .card .sub { color: var(--muted); font-size: 14px; margin: 0 0 12px; }
+  .files { display: flex; flex-direction: column; gap: 6px; }
+  .file {
+    display: flex; justify-content: space-between; gap: 8px; text-decoration: none; color: var(--text);
+    background: var(--surface-2); border-radius: 8px; padding: 8px 12px; font-size: 14px;
+  }
+  .file:hover { outline: 1px solid var(--accent); }
+  .file span:last-child { color: var(--muted); white-space: nowrap; }
+  .empty { color: var(--muted); font-size: 14px; }
+  .steps { margin: 0; padding-left: 20px; font-size: 14px; color: var(--muted); }
+  .steps li { margin: 4px 0; }
+  .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; }
+  .feature { padding: 4px 0; }
+  .feature strong { display: block; margin-bottom: 2px; }
+  .feature p { margin: 0; color: var(--muted); font-size: 15px; }
+  footer { text-align: center; color: var(--muted); font-size: 14px; padding: 32px 16px 48px; border-top: 1px solid var(--border); }
+  code { background: var(--surface-2); padding: 1px 5px; border-radius: 4px; font-size: 0.92em; }
+</style>
+</head>
+<body>
+<main>
+  <section class="hero">
+    <img src="icon.svg" alt="" />
+    <h1>Legi</h1>
+    <p class="tagline">
+      Jurisprudence, codes et assistant juridique pour les étudiants en droit, à partir des données officielles de
+      Légifrance.
+    </p>
+    <a id="main-download" class="primary" href="#plateformes" aria-disabled="true">Recherche de la dernière version…</a>
+    <p id="main-meta" class="meta"></p>
+    <p id="web-link" class="secondary-links" hidden>
+      Ou utilisez directement la <a id="web-link-a" href="#">version web</a>, sans installation.
+    </p>
+  </section>
+
+  <p id="notice" class="notice" hidden></p>
+
+  <h2 id="plateformes">Toutes les plateformes</h2>
+  <div class="grid" id="platforms"></div>
+
+  <h2>Ce que fait Legi</h2>
+  <div class="features">
+    <div class="feature"><strong>Assistant</strong><p>Posez une question de droit : Legi cherche les décisions sur Légifrance et répond en les citant.</p></div>
+    <div class="feature"><strong>Codes</strong><p>Code civil, Code de commerce et dix autres codes : article par numéro ou par mots-clés.</p></div>
+    <div class="feature"><strong>Recherche d'arrêts</strong><p>Cour de cassation, Conseil d'État, Conseil constitutionnel, avec filtres et Bulletin.</p></div>
+    <div class="feature"><strong>Base locale</strong><p>Les décisions consultées restent disponibles hors ligne sur votre appareil.</p></div>
+  </div>
+</main>
+<footer>
+  Legi utilise <a href="https://www.openlegi.fr">OpenLegi</a> pour accéder à Légifrance. Vérifiez toujours une décision
+  sur Légifrance avant de la citer. · <a href="https://github.com/nonowagbt/Legi_ma">Code source</a>
+</footer>
+
+<script>
+  // Adresse de la version web hébergée (Render). Laisser vide pour masquer le lien.
+  const WEB_APP_URL = "";
+  const REPO = "nonowagbt/Legi_ma";
+  const RELEASES_PAGE = `https://github.com/${REPO}/releases`;
+
+  /** Plateformes, fichiers attendus (noms produits par Tauri) et étapes d'installation. */
+  const PLATFORMS = [
+    {
+      id: "windows", name: "Windows", sub: "Windows 10 et 11",
+      files: [
+        { label: "Installeur (.exe)", match: /setup\.exe$/i, primary: true },
+        { label: "Paquet MSI (.msi)", match: /\.msi$/i },
+      ],
+      steps: [
+        "Ouvrez le fichier téléchargé : l'installation ne demande pas de droits administrateur.",
+        "Si Windows affiche « Windows a protégé votre ordinateur » : Informations complémentaires › Exécuter quand même.",
+      ],
+    },
+    {
+      id: "mac-arm", name: "macOS · Apple Silicon", sub: "Mac M1, M2, M3, M4 (depuis fin 2020)",
+      files: [{ label: "Image disque (.dmg)", match: /aarch64\.dmg$/i, primary: true }],
+      steps: [
+        "Ouvrez le .dmg et glissez Legi dans Applications.",
+        "Première ouverture : clic droit sur Legi › Ouvrir › Ouvrir.",
+      ],
+    },
+    {
+      id: "mac-intel", name: "macOS · Intel", sub: "Mac à processeur Intel (avant 2021)",
+      files: [{ label: "Image disque (.dmg)", match: /(x64|x86_64)\.dmg$/i, primary: true }],
+      steps: [
+        "Ouvrez le .dmg et glissez Legi dans Applications.",
+        "Première ouverture : clic droit sur Legi › Ouvrir › Ouvrir.",
+      ],
+    },
+    {
+      id: "linux", name: "Linux", sub: "Ubuntu, Debian, Fedora…",
+      files: [
+        { label: "AppImage (toutes distributions)", match: /\.AppImage$/i, primary: true },
+        { label: "Paquet .deb (Ubuntu, Debian)", match: /\.deb$/i },
+        { label: "Paquet .rpm (Fedora, openSUSE)", match: /\.rpm$/i },
+      ],
+      steps: ["AppImage : rendez le fichier exécutable puis lancez-le. Paquet .deb : sudo apt install ./fichier.deb"],
+    },
+    {
+      id: "android", name: "Android", sub: "Android 7 et plus",
+      files: [{ label: "Application (.apk)", match: /\.apk$/i, primary: true }],
+      steps: [
+        "Téléchargez l'APK depuis le téléphone et ouvrez-le.",
+        "Autorisez l'installation d'applications de cette source quand Android le demande.",
+      ],
+    },
+    {
+      id: "ios", name: "iPhone et iPad", sub: "Application web installable",
+      files: [],
+      steps: [
+        "Ouvrez la version web dans Safari.",
+        "Touchez Partager › Sur l'écran d'accueil : Legi s'ouvre ensuite comme une application.",
+      ],
+    },
+  ];
+
+  const $ = (id) => document.getElementById(id);
+  const formatSize = (bytes) => (bytes >= 1e6 ? `${(bytes / 1e6).toFixed(0)} Mo` : `${Math.max(1, Math.round(bytes / 1e3))} Ko`);
+
+  /** Plateforme du visiteur (Mac : Apple Silicon sauf indication contraire). */
+  async function detectPlatform() {
+    const ua = navigator.userAgent;
+    if (/android/i.test(ua)) return "android";
+    if (/iphone|ipad|ipod/i.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1)) return "ios";
+    if (/windows/i.test(ua)) return "windows";
+    if (/mac os x|macintosh/i.test(ua)) {
+      try {
+        const data = await navigator.userAgentData?.getHighEntropyValues(["architecture"]);
+        if (data?.architecture === "x86") return "mac-intel";
+      } catch {}
+      return "mac-arm";
+    }
+    if (/linux|x11/i.test(ua)) return "linux";
+    return null;
+  }
+
+  async function latestRelease() {
+    const res = await fetch(`https://api.github.com/repos/${REPO}/releases/latest`, {
+      headers: { Accept: "application/vnd.github+json" },
+    });
+    if (res.status === 404) return null;
+    if (!res.ok) throw new Error(`GitHub a répondu ${res.status}`);
+    return res.json();
+  }
+
+  function render(release, current) {
+    const assets = release?.assets ?? [];
+    const container = $("platforms");
+    container.innerHTML = "";
+
+    for (const p of PLATFORMS) {
+      const card = document.createElement("article");
+      card.className = "card" + (p.id === current ? " current" : "");
+      card.id = `p-${p.id}`;
+      const files = p.files
+        .map((f) => ({ ...f, asset: assets.find((a) => f.match.test(a.name)) }))
+        .filter((f) => f.asset);
+
+      let filesHtml;
+      if (p.id === "ios") {
+        filesHtml = WEB_APP_URL
+          ? `<div class="files"><a class="file" href="${WEB_APP_URL}"><span>Ouvrir la version web</span><span>Safari</span></a></div>`
+          : `<p class="empty">La version web sera bientôt en ligne.</p>`;
+      } else if (files.length) {
+        filesHtml = `<div class="files">${files
+          .map((f) => `<a class="file" href="${f.asset.browser_download_url}"><span>${f.label}</span><span>${formatSize(f.asset.size)}</span></a>`)
+          .join("")}</div>`;
+      } else {
+        filesHtml = `<p class="empty">Pas encore disponible pour cette version.</p>`;
+      }
+
+      card.innerHTML = `
+        <h3>${p.name}${p.id === current ? " · votre appareil" : ""}</h3>
+        <p class="sub">${p.sub}</p>
+        ${filesHtml}
+        <ol class="steps">${p.steps.map((s) => `<li>${s}</li>`).join("")}</ol>`;
+      container.appendChild(card);
+    }
+
+    // Bouton principal : fichier adapté à l'appareil du visiteur.
+    const button = $("main-download");
+    const platform = PLATFORMS.find((p) => p.id === current);
+    const primary = platform?.files.find((f) => f.primary);
+    const asset = primary && assets.find((a) => primary.match.test(a.name));
+
+    if (current === "ios" && WEB_APP_URL) {
+      button.textContent = "Ouvrir Legi sur iPhone";
+      button.href = WEB_APP_URL;
+      button.removeAttribute("aria-disabled");
+      $("main-meta").textContent = "Puis Partager › Sur l'écran d'accueil";
+    } else if (asset) {
+      button.textContent = `Télécharger pour ${platform.name}`;
+      button.href = asset.browser_download_url;
+      button.removeAttribute("aria-disabled");
+      $("main-meta").textContent = `Version ${release.tag_name.replace(/^v/, "")} · ${formatSize(asset.size)}`;
+    } else {
+      button.textContent = "Choisir ma plateforme";
+      button.href = "#plateformes";
+      button.removeAttribute("aria-disabled");
+      $("main-meta").textContent = release ? `Version ${release.tag_name.replace(/^v/, "")}` : "";
+    }
+  }
+
+  (async () => {
+    if (WEB_APP_URL) {
+      $("web-link").hidden = false;
+      $("web-link-a").href = WEB_APP_URL;
+    }
+    const current = await detectPlatform();
+    try {
+      const release = await latestRelease();
+      if (!release) {
+        $("notice").hidden = false;
+        $("notice").innerHTML = `Aucune version n'est encore publiée. Les installeurs apparaîtront ici dès la première publication (<a href="${RELEASES_PAGE}">voir sur GitHub</a>).`;
+      }
+      render(release, current);
+    } catch (err) {
+      $("notice").hidden = false;
+      $("notice").innerHTML = `Impossible de récupérer la liste des fichiers (${err.message}). Téléchargez-les directement sur <a href="${RELEASES_PAGE}">GitHub</a>.`;
+      render(null, current);
+    }
+  })();
+</script>
+</body>
+</html>

@@ -104,6 +104,13 @@ function WebSettings({ status, onSaved }: { status: BackendStatus | null; onSave
       }}
     >
       <p>Dans la version web, les clés sont configurées sur le serveur (fichier .env).</p>
+      <p>
+        Legi existe aussi en application pour Windows, macOS, Linux et Android :{" "}
+        <a href="https://nonowagbt.github.io/Legi_ma/" target="_blank" rel="noreferrer">
+          télécharger l'application
+        </a>
+        .
+      </p>
       {status && !status.ready && <p className="error">Variable manquante côté serveur : {status.missing.join(", ")}.</p>}
       <label className="field block">
         Code d'accès

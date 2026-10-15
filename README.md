@@ -49,6 +49,8 @@ npm run desktop:dev     # version desktop (nécessite Rust)
 
 ## Installation sur chaque système
 
+Page de téléchargement : **https://nonowagbt.github.io/Legi_ma/** ([site/index.html](site/index.html)). Elle détecte le système du visiteur et propose l'installeur de la dernière release publiée. Elle est déployée par [.github/workflows/pages.yml](.github/workflows/pages.yml) ; à activer une fois dans *Settings › Pages › Source : GitHub Actions*. Pour y afficher le lien vers la version web, renseigner `WEB_APP_URL` en haut du script de la page.
+
 ### Windows et macOS (et Linux)
 
 Les installeurs sont compilés automatiquement par GitHub Actions ([.github/workflows/release.yml](.github/workflows/release.yml)) :
@@ -98,6 +100,8 @@ docker run -d -p 8787:8787 --env-file .env -v legi-data:/app/data legi
 ```
 
 **Hébergement gratuit sur Render** : le fichier [render.yaml](render.yaml) décrit le service. Sur [render.com](https://render.com), se connecter avec GitHub, puis **New › Blueprint**, choisir ce dépôt et renseigner `OPENLEGI_TOKEN`, `OLLAMA_API_KEY` et `APP_ACCESS_CODE`. Le site est publié en HTTPS sur `https://legi-xxxx.onrender.com` et redéployé à chaque push. Offre gratuite : le service s'endort après 15 minutes sans visite (premier chargement ensuite d'environ une minute) et la base locale repart de zéro à chaque redéploiement.
+
+Pour envoyer ensuite les clés du `.env` local au site sans les recopier : créer une clé API Render (*Account Settings › API Keys*), la mettre dans `RENDER_API_KEY` du `.env` avec le code d'accès dans `SITE_ACCESS_CODE`, puis lancer `npm run render:env` (met à jour les variables et redéploie).
 
 Pour un accès depuis un téléphone, le site doit être servi en HTTPS (hébergeur type Render, Railway, Fly.io, ou VPS avec Caddy). S'il est public, définir `APP_ACCESS_CODE` pour éviter que n'importe qui consomme vos quotas.
 
