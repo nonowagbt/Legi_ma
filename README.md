@@ -99,7 +99,7 @@ docker build -t legi .
 docker run -d -p 8787:8787 --env-file .env -v legi-data:/app/data legi
 ```
 
-**Hébergement gratuit sur Render** : le fichier [render.yaml](render.yaml) décrit le service. Sur [render.com](https://render.com), se connecter avec GitHub, puis **New › Blueprint**, choisir ce dépôt et renseigner `OPENLEGI_TOKEN`, `OLLAMA_API_KEY` et `APP_ACCESS_CODE`. Le site est publié en HTTPS sur `https://legi-xxxx.onrender.com` et redéployé à chaque push. Offre gratuite : le service s'endort après 15 minutes sans visite (premier chargement ensuite d'environ une minute) et la base locale repart de zéro à chaque redéploiement.
+**Hébergement gratuit sur Render** : le fichier [render.yaml](render.yaml) décrit le service. Sur [render.com](https://render.com), se connecter avec GitHub, puis **New › Blueprint**, choisir ce dépôt et renseigner `OPENLEGI_TOKEN`, `OLLAMA_API_KEY` et `APP_ACCESS_CODE`. Le site est publié en HTTPS sur **https://legi-hq5g.onrender.com** et redéployé à chaque push. Offre gratuite : le service s'endort après 15 minutes sans visite (premier chargement ensuite d'environ une minute) et la base locale repart de zéro à chaque redéploiement.
 
 Pour envoyer ensuite les clés du `.env` local au site sans les recopier : créer une clé API Render (*Account Settings › API Keys*), la mettre dans `RENDER_API_KEY` du `.env` avec le code d'accès dans `SITE_ACCESS_CODE`, puis lancer `npm run render:env` (met à jour les variables et redéploie).
 
