@@ -38,14 +38,16 @@ export default function App() {
     setTab("search");
   };
 
-  const refreshStatus = useCallback(async (b: Backend) => {
+  const refreshStatus = useCallback(async (b: Backend): Promise<BackendStatus | null> => {
     try {
       const s = await b.status();
       setStatus(s);
       setStatusError("");
       if (!s.ready || s.needsAccessCode) setTab((t) => (t === "chat" ? "settings" : t));
+      return s;
     } catch (err) {
       setStatusError(err instanceof Error ? err.message : String(err));
+      return null;
     }
   }, []);
 
@@ -105,7 +107,12 @@ export default function App() {
           />
         </div>
         <div hidden={tab !== "settings"} className="view">
-          <SettingsView backend={backend} status={status} onSaved={() => refreshStatus(backend)} />
+          <SettingsView
+            backend={backend}
+            status={status}
+            onSaved={() => refreshStatus(backend)}
+            onReady={() => setTab("chat")}
+          />
         </div>
       </main>
     </div>

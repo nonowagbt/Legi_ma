@@ -5,20 +5,27 @@ import { loadAccessCode, loadSettings, saveAccessCode, saveSettings } from "../p
 interface Props {
   backend: Backend;
   status: BackendStatus | null;
-  onSaved: () => void;
+  /** Revérifie la configuration ; renvoie le nouvel état (null si le serveur est injoignable). */
+  onSaved: () => Promise<BackendStatus | null>;
+  /** Appelé quand tout est prêt, pour revenir à l'assistant. */
+  onReady: () => void;
 }
 
-export default function SettingsView({ backend, status, onSaved }: Props) {
+export default function SettingsView({ backend, status, onSaved, onReady }: Props) {
   return (
     <div className="settings">
       <h2>Paramètres</h2>
-      {backend.kind === "desktop" ? <DesktopSettings onSaved={onSaved} /> : <WebSettings status={status} onSaved={onSaved} />}
+      {backend.kind === "desktop" ? (
+        <DesktopSettings onSaved={onSaved} />
+      ) : (
+        <WebSettings status={status} onSaved={onSaved} onReady={onReady} />
+      )}
       <EngineStatus status={status} />
     </div>
   );
 }
 
-function DesktopSettings({ onSaved }: { onSaved: () => void }) {
+function DesktopSettings({ onSaved }: { onSaved: () => Promise<unknown> }) {
   const [settings, setSettings] = useState(loadSettings);
   const [saved, setSaved] = useState(false);
   const update = (patch: Partial<typeof settings>) => {
@@ -38,7 +45,7 @@ function DesktopSettings({ onSaved }: { onSaved: () => void }) {
           ollamaApiKey: settings.ollamaApiKey.trim(),
         });
         setSaved(true);
-        onSaved();
+        void onSaved();
       }}
     >
       <label className="field block">
@@ -92,18 +99,50 @@ function DesktopSettings({ onSaved }: { onSaved: () => void }) {
   );
 }
 
-function WebSettings({ status, onSaved }: { status: BackendStatus | null; onSaved: () => void }) {
+type Feedback = { kind: "ok" | "error"; text: string } | null;
+
+/** Message affiché après vérification du code auprès du serveur. */
+function feedbackFor(s: BackendStatus | null): Feedback {
+  if (!s) return { kind: "error", text: "Le serveur ne répond pas. Réessayez dans une minute (il peut être en train de démarrer)." };
+  if (s.needsAccessCode) return { kind: "error", text: "Code incorrect. Vérifiez-le auprès de la personne qui vous l'a donné." };
+  if (!s.ready) {
+    return {
+      kind: "error",
+      text: `Code accepté, mais le serveur n'est pas configuré : ${s.missing.join(", ")} manquant. L'administrateur doit l'ajouter sur l'hébergeur.`,
+    };
+  }
+  const ai = s.ollama.available ? `IA ${s.ollama.model} disponible` : "IA indisponible (réponses en extraits)";
+  return { kind: "ok", text: `Accès validé : OpenLegi disponible, ${ai}.` };
+}
+
+function WebSettings({
+  status,
+  onSaved,
+  onReady,
+}: {
+  status: BackendStatus | null;
+  onSaved: () => Promise<BackendStatus | null>;
+  onReady: () => void;
+}) {
   const [code, setCode] = useState(loadAccessCode);
+  const [checking, setChecking] = useState(false);
+  const [feedback, setFeedback] = useState<Feedback>(null);
 
   return (
     <form
-      onSubmit={(e) => {
+      onSubmit={async (e) => {
         e.preventDefault();
+        setChecking(true);
+        setFeedback(null);
         saveAccessCode(code.trim());
-        onSaved();
+        const s = await onSaved();
+        setChecking(false);
+        const result = feedbackFor(s);
+        setFeedback(result);
+        if (result?.kind === "ok") setTimeout(onReady, 1200);
       }}
     >
-      <p>Dans la version web, les clés sont configurées sur le serveur (fichier .env).</p>
+      <p>Dans la version web, les clés OpenLegi et IA sont configurées par l'administrateur sur l'hébergeur.</p>
       <p>
         Legi existe aussi en application pour Windows, macOS, Linux et Android :{" "}
         <a href="https://nonowagbt.github.io/Legi_ma/" target="_blank" rel="noreferrer">
@@ -111,15 +150,30 @@ function WebSettings({ status, onSaved }: { status: BackendStatus | null; onSave
         </a>
         .
       </p>
-      {status && !status.ready && <p className="error">Variable manquante côté serveur : {status.missing.join(", ")}.</p>}
+      {!feedback && status && !status.ready && !status.needsAccessCode && (
+        <p className="error">Le serveur n'est pas configuré : {status.missing.join(", ")} manquant.</p>
+      )}
       <label className="field block">
         Code d'accès
-        <input type="password" value={code} onChange={(e) => setCode(e.target.value)} autoComplete="off" />
-        <span className="hint">Uniquement si l'administrateur du site en a défini un.</span>
+        <input
+          type="password"
+          value={code}
+          onChange={(e) => {
+            setCode(e.target.value);
+            setFeedback(null);
+          }}
+          autoComplete="off"
+        />
+        <span className="hint">Le code fourni par l'administrateur du site. Il est mémorisé sur cet appareil.</span>
       </label>
-      <button type="submit" className="primary">
-        Valider
+      <button type="submit" className="primary" disabled={checking}>
+        {checking ? "Vérification…" : "Valider"}
       </button>
+      {feedback && (
+        <p className={feedback.kind === "ok" ? "success" : "error"} role="status">
+          {feedback.text}
+        </p>
+      )}
     </form>
   );
 }
