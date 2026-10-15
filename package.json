@@ -21,7 +21,8 @@
     "android:build": "tauri android build --apk",
     "ios:init": "tauri ios init",
     "ios:dev": "tauri ios dev",
-    "ios:build": "tauri ios build"
+    "ios:build": "tauri ios build",
+    "render:env": "tsx scripts/render-env.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.133.0",
